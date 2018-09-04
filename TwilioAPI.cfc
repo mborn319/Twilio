@@ -25,6 +25,7 @@ component output="false" {
 			returnData.response = StructNew();
 
 			data.twilioURL = getTwilioURL(requestType=Arguments.requestType);
+			data.httpMethod = getHttpMethod(requestType=Arguments.requestType);
 
 		}
 		catch (any errorItem)
@@ -40,7 +41,7 @@ component output="false" {
 				/*
 					CF9+ version. CF11+ can use the scripted cfhttp commented out below
 				*/
-				data.httpService = new http(method="GET", url=data.twilioURL, charset="utf-8"); 
+				data.httpService = new http(method=data.httpMethod, url=data.twilioURL, charset="utf-8"); 
 
 				data.httpService.addParam(name="From", type="formfield", value=getTwilioFromNumber()); 
 
@@ -54,7 +55,7 @@ component output="false" {
 				/*
 					CF11+ version
 
-					cfhttp(method="GET", charset="utf-8", url=data.twilioURL, result="data.result") 
+					cfhttp(method=data.httpMethod, charset="utf-8", url=data.twilioURL, result="data.result") 
 					{
     					cfhttpparam(name="From", type="formfield", value=getTwilioFromNumber());
 
@@ -170,6 +171,23 @@ component output="false" {
 
 			default: 
 				return this.twilioConfig.base;
+		}
+	}
+
+	public string function getHttpMethod(string requestType='')
+	{
+		switch (LCase(Trim(Arguments.requestType))) {
+			case "sms":
+				return "POST";
+
+			case "usage":
+				return "GET";
+
+			case "messages":
+				return "GET";
+
+			default: 
+				return "GET";
 		}
 	}
 
