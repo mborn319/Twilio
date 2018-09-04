@@ -41,7 +41,7 @@ component output="false" {
 				/*
 					CF9+ version. CF11+ can use the scripted cfhttp commented out below
 				*/
-				data.httpService = new http(method=data.httpMethod, url=data.twilioURL, charset="utf-8"); 
+				data.httpService = new http(method=data.httpMethod, url=data.twilioURL, charset="utf-8", username = this.twilioConfig.accountSID, password = this.twilioConfig.authToken); 
 
 				data.httpService.addParam(name="From", type="formfield", value=getTwilioFromNumber()); 
 
@@ -55,7 +55,7 @@ component output="false" {
 				/*
 					CF11+ version
 
-					cfhttp(method=data.httpMethod, charset="utf-8", url=data.twilioURL, result="data.result") 
+					cfhttp(method=data.httpMethod, charset="utf-8", url=data.twilioURL, result="data.result", username = this.twilioConfig.accountSID, password = this.twilioConfig.authToken) 
 					{
     					cfhttpparam(name="From", type="formfield", value=getTwilioFromNumber());
 
